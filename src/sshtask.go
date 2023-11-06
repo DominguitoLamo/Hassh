@@ -29,7 +29,7 @@ func main() {
 }
 
 func initConfig() *svc.ServiceContext {
-	var configFile = flag.String("f", "src/etc/sshtask.yaml", "the config file")
+	var configFile = flag.String("f", "etc/sshtask.yaml", "the config file")
 	var configJson = flag.String("jconfig", "etc/componentConfig.json", "the config file")
 
 	flag.Parse()

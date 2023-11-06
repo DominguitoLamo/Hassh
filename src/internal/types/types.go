@@ -54,11 +54,11 @@ type DELETESSHInfoResp struct {
 }
 
 type EchoReq struct {
-	Msg string `json:"string"`
+	Msg string `json:"msg"`
 }
 
 type EchoResp struct {
-	Msg string `json:"string"`
+	Msg string `json:"msg"`
 }
 
 type SwitchBrandResp struct {

@@ -5,6 +5,7 @@ import (
 
 	"hassh/src/internal/svc"
 	"hassh/src/internal/types"
+	"hassh/src/internal/utils"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,7 +25,12 @@ func NewEchoMsgLogic(ctx context.Context, svcCtx *svc.ServiceContext) *EchoMsgLo
 }
 
 func (l *EchoMsgLogic) EchoMsg(req *types.EchoReq) (resp *types.EchoResp, err error) {
-	// todo: add your logic here and delete this line
+	resp = new(types.EchoResp)
 
+	if (req.Msg != "echo") {
+		err = utils.ParameterError()
+	} else {
+		resp.Msg = req.Msg
+	}
 	return
 }
