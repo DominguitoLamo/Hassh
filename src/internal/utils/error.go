@@ -8,3 +8,7 @@ import (
 func ParameterError() error {
 	return errors.New(hconstant.ERROR_PARAMETER, "parameter error")
 }
+
+func IpFormatError(msg string) error {
+	return errors.New(hconstant.ERROR_IPFORMAT, msg)
+}
