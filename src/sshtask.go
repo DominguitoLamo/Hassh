@@ -4,10 +4,11 @@ import (
 	"flag"
 	"fmt"
 
+	"hassh/src/internal/components"
 	"hassh/src/internal/config"
 	"hassh/src/internal/handler"
+	"hassh/src/internal/middleware"
 	"hassh/src/internal/svc"
-	"hassh/src/internal/components"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
@@ -21,6 +22,7 @@ func main() {
 
 	initComponents(ctx)
 	handler.RegisterHandlers(server, ctx)
+	middleware.ErrorHandling()
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()

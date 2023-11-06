@@ -1,4 +1,4 @@
-package sshtask
+package switchbrand
 
 import "github.com/zeromicro/go-zero/core/stores/sqlx"
 
