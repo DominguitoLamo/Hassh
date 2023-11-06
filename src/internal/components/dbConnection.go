@@ -7,7 +7,7 @@ import (
 )
 
 func InitDBConnection(ctx *svc.ServiceContext) {
-	dbConnection := sqlx.NewMysql("root:moto9171@/demo?parseTime=true")
+	dbConnection := sqlx.NewMysql(ctx.CustomConfig.DatabaseKey)
 	ctx.Components.DbConnection = dbConnection
 }
 

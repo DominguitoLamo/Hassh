@@ -4,6 +4,8 @@ go 1.21.3
 
 require github.com/zeromicro/go-zero v1.6.0
 
+require github.com/jinzhu/copier v0.4.0 // indirect
+
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
