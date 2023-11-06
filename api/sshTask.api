@@ -26,7 +26,7 @@ type (
 		Desc     string `json:"desc"`   // task desc
 	}
 	AddSSHInfoResp {
-		Id       int64  `json:"id"` // Primary Key
+		Id int64 `json:"id"` // Primary Key
 	}
 	UpdateSSHInfoReq {
 		Id       int64  `json:"id"` // Primary Key
@@ -39,7 +39,7 @@ type (
 		Desc     string `json:"desc"`   // task desc
 	}
 	UpdateSSHInfoResp {
-		Id       int64  `json:"id"` // Primary Key
+		Id int64 `json:"id"` // Primary Key
 	}
 	DELETESSHInfoReq {
 		Id int64 `json:"id"`
@@ -48,10 +48,10 @@ type (
 		Id int64 `json:"id"`
 	}
 	EchoReq {
-		msg string `json:"string"`
+		Msg string `json:"string"`
 	}
 	EchoResp {
-		msg string `json:"string"`
+		Msg string `json:"string"`
 	}
 	SwitchBrandResp {
 		Id   int64  `json:"id"` // Primary Key
@@ -65,12 +65,12 @@ type (
 		Brand    string `json:"brand"`  // only for cisco, huawei
 		Script   string `json:"script"` // script for task. Statements are separated with ;
 	}
-    RunCmdResp {
-        id int64 `json:"id"` // 返回文件id號, 用它來下載
-    }
-    DownloadCmdResultReq {
-        id int64 `json:"id"`
-    }
+	RunCmdResp {
+		Id int64 `json:"id"` // 返回文件id號, 用它來下載
+	}
+	DownloadCmdResultReq {
+		Id int64 `json:"id"`
+	}
 )
 
 @server (
@@ -96,9 +96,9 @@ service sshtask {
 	@handler getSwitchBrand
 	get /switchBrand() returns (SwitchBrandResp)
 
-    @handler runCmd
-    post /runCmd(RunCmdReq) returns (RunCmdResp)
+	@handler runCmd
+	post /runCmd(RunCmdReq) returns (RunCmdResp)
 
-    @handler downloadCmdResult
-    get /getCmdResult(DownloadCmdResultReq)
+	@handler downloadCmdResult
+	get /getCmdResult(DownloadCmdResultReq)
 }
