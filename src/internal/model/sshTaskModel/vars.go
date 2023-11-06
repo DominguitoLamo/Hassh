@@ -1,4 +1,4 @@
-package template
+package sshtask
 
 import "github.com/zeromicro/go-zero/core/stores/sqlx"
 
