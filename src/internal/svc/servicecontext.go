@@ -3,6 +3,7 @@ package svc
 import (
 	"hassh/src/internal/config"
 
+	switchgo "github.com/DominguitoLamo/switchGo"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
@@ -12,6 +13,7 @@ type CustomConfigStruct struct {
 
 type ComponentRegister struct {
 	DbConnection sqlx.SqlConn
+	SSHManager *switchgo.SessionManager
 }
 
 type ServiceContext struct {

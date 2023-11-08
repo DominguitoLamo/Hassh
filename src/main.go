@@ -45,4 +45,5 @@ func initConfig() *svc.ServiceContext {
 
 func initComponents(ctx *svc.ServiceContext) {
 	components.InitDBConnection(ctx)
+	components.InitSSHSession(ctx)
 }
