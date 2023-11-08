@@ -1,15 +1,14 @@
 package components
 
 import (
-	"crypto/md5"
-	"encoding/hex"
+	"context"
 	"fmt"
 	"hassh/src/internal/types"
-	"io"
 	"os"
 	"sync"
 
 	switchgo "github.com/DominguitoLamo/switchGo"
+	"github.com/zeromicro/go-zero/core/logc"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -25,14 +24,7 @@ func NewSSHResultManager() *SshResultManager {
 	return manager
 }
 
-func (s *SshResultManager) SaveResult(req *types.RunCmdReq, session *switchgo.SSHSession, result string) (string, error) {
-	// gen key
-	key, hasherr := genhashKey(req, session)
-	if (hasherr != nil) {
-		logx.Error(hasherr.Error())
-		return "", hasherr
-	}
-
+func (s *SshResultManager) SaveResult(session *switchgo.SSHSession, req *types.RunCmdReq, key, result string) error {
 	// create file
 	t := session.GetLastUseTime()
 	date := fmt.Sprintf("%d%d%d", t.Year(), t.Month(), t.Day()) 
@@ -40,24 +32,18 @@ func (s *SshResultManager) SaveResult(req *types.RunCmdReq, session *switchgo.SS
 	file, fileErr := os.Create(fileName)
 	if (fileErr != nil) {
 		logx.Error(fileErr.Error())
-		return "", fileErr
+		return fileErr
 	}
-	file.Write([]byte(result))
+	bytes, err := file.Write([]byte(result))
+	if (err != nil) {
+		logx.Error("Write file error: ", err.Error())
+	} else {
+		logc.Debug(context.Background(), "Write file success. %s bytes written", bytes)
+	}
 
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 	s.resultMap[key] = file
 
-	return key, nil
-}
-
-func genhashKey(req *types.RunCmdReq, session *switchgo.SSHSession) (string, error) {
-	hasher := md5.New()
-	keyStr := fmt.Sprintf("%s%s%s", req.Name, req.Ip, session.GetLastUseTime().String())
-	_, err := io.WriteString(hasher, keyStr)
-	if err != nil {
-		return "", err
-	}
-
-	return hex.EncodeToString(hasher.Sum(nil))[:8], nil
+	return nil
 }
