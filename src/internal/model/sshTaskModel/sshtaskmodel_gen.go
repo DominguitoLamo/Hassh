@@ -25,6 +25,7 @@ type (
 		FindOne(ctx context.Context, id int64) (*SshTask, error)
 		Update(ctx context.Context, data *SshTask) error
 		Delete(ctx context.Context, id int64) error
+		SelectItems(ctx context.Context, page int64, pageNum int64) (*[]*SshTask, error)
 	}
 
 	defaultSshTaskModel struct {
@@ -64,6 +65,20 @@ func (m *defaultSshTaskModel) FindOne(ctx context.Context, id int64) (*SshTask, 
 	switch err {
 	case nil:
 		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *defaultSshTaskModel) SelectItems(ctx context.Context, page int64, pageNum int64) (*[]*SshTask, error) {
+	query := fmt.Sprintf("select %s from %s limit ?, ?", sshTaskRows, m.table)
+	resp := new([]*SshTask)
+	err := m.conn.QueryRowsCtx(ctx, resp, query, page, pageNum)
+	switch err {
+	case nil:
+		return resp, nil
 	case sqlc.ErrNotFound:
 		return nil, ErrNotFound
 	default:
