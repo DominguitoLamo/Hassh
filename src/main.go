@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 
-	"hassh/src/internal/components"
 	"hassh/src/internal/config"
 	"hassh/src/internal/handler"
 	"hassh/src/internal/middleware"
@@ -20,7 +19,7 @@ func main() {
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
 
-	initComponents(ctx)
+	svc.InitComponents(ctx)
 	handler.RegisterHandlers(server, ctx)
 	middleware.ErrorHandling()
 
@@ -41,9 +40,4 @@ func initConfig() *svc.ServiceContext {
 
 	ctx := svc.NewServiceContext(c, j)
 	return ctx
-}
-
-func initComponents(ctx *svc.ServiceContext) {
-	components.InitDBConnection(ctx)
-	components.InitSSHSession(ctx)
 }

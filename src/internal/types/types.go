@@ -69,6 +69,7 @@ type SwitchBrandResp struct {
 
 type RunCmdReq struct {
 	Ip       string `json:"ip"`
+	Name     string `json:"name"` // device name
 	Account  string `json:"account"`
 	Password string `json:"password"`
 	Brand    string `json:"brand"`  // only for cisco, huawei
@@ -76,9 +77,9 @@ type RunCmdReq struct {
 }
 
 type RunCmdResp struct {
-	Id int64 `json:"id"` // 返回文件id號, 用它來下載
+	Id string `json:"id"` // 返回文件id號, 用它來下載
 }
 
 type DownloadCmdResultReq struct {
-	Id int64 `json:"id"`
+	Id string `json:"id"`
 }

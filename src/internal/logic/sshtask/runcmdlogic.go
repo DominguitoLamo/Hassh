@@ -2,10 +2,14 @@ package sshtask
 
 import (
 	"context"
+	"strings"
 
+	"hassh/src/internal/constant"
 	"hassh/src/internal/svc"
 	"hassh/src/internal/types"
+	"hassh/src/internal/utils"
 
+	switchgo "github.com/DominguitoLamo/switchGo"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -24,7 +28,35 @@ func NewRunCmdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RunCmdLogi
 }
 
 func (l *RunCmdLogic) RunCmd(req *types.RunCmdReq) (resp *types.RunCmdResp, err error) {
-	// todo: add your logic here and delete this line
+	sshManager := l.svcCtx.Components.SSHManager
 
+	config, configErr := switchgo.SSHConfigCreate(req.Account, req.Password, req.Ip, constant.SSH_DEFAULT_PORT, req.Brand)
+	if configErr != nil {
+		err = utils.ConfigError(configErr.Error())
+		return
+	}
+
+	session, sessionErr := sshManager.GetSSHSession(config)
+	if sessionErr != nil {
+		err = utils.SSHConnectionError(sessionErr.Error())
+		return
+	}
+	
+	cmdResult, cmdError := session.RunCmdsAndClose(strings.Split(req.Script, ";")...)
+	if cmdError != nil {
+		err = utils.SSHCmdError(cmdError.Error())
+		return
+	}
+
+	sshResultManager := l.svcCtx.Components.SSHResultManager
+	saveKey, saveErr := sshResultManager.SaveResult(req, session, cmdResult)
+	if saveErr != nil {
+		err = utils.SSHCmdError(saveErr.Error())
+		return
+	}
+
+	resp = new(types.RunCmdResp)
+	resp.Id = saveKey
+	
 	return
 }
