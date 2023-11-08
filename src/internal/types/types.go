@@ -2,7 +2,8 @@
 package types
 
 type GETSSHInfoReq struct {
-	Id int64 `json:"id"`
+	Page int64 `json:"page"`
+	PageItemsNum int64 `json:"pageItemsNum"`
 }
 
 type GETSSHInfoResp struct {
