@@ -4,6 +4,8 @@ import (
 	"hassh/src/internal/components"
 	"hassh/src/internal/config"
 	taskqueue "hassh/src/taskQueue"
+	"os"
+	"path/filepath"
 
 	switchgo "github.com/DominguitoLamo/switchGo"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -24,6 +26,7 @@ type QueueRegister struct {
 }
 
 type ServiceContext struct {
+	execPath string
 	Config config.Config
 	CustomConfig CustomConfigStruct
 	Components *ComponentRegister
@@ -39,6 +42,19 @@ func NewServiceContext(c config.Config, custom CustomConfigStruct) *ServiceConte
 		Components: component,
 		Queues: queues,
 	}
+}
+
+func (ctx *ServiceContext) SetExecPath() {
+    ex, err := os.Executable()
+    if err != nil {
+        panic(err)
+    }
+    exePath := filepath.Dir(ex)
+	ctx.execPath = exePath
+}
+
+func (ctx *ServiceContext) GetTmpPath() string {
+	return filepath.Join(ctx.execPath, "tmp")
 }
 
 func InitQueues(ctx *ServiceContext) {

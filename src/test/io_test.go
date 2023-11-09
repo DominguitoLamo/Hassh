@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"path/filepath"
 )
 
 func TestIo(t *testing.T) {
@@ -14,4 +15,18 @@ func TestIo(t *testing.T) {
 	b := make([]byte, stat.Size())
 	f.Read(b)
 	fmt.Println(string(b))
+}
+
+func TestPath(t *testing.T) {
+	getExePath()
+}
+
+func getExePath() string {
+    ex, err := os.Executable()
+    if err != nil {
+        panic(err)
+    }
+    exePath := filepath.Dir(ex)
+    fmt.Println("exePath:", exePath)
+    return exePath
 }
