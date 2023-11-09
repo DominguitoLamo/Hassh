@@ -3,8 +3,10 @@ package sshtask
 import (
 	"context"
 
+	"hassh/src/internal/components"
 	"hassh/src/internal/svc"
 	"hassh/src/internal/types"
+	"hassh/src/internal/utils"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,8 +25,13 @@ func NewDownloadCmdResultLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 	}
 }
 
-func (l *DownloadCmdResultLogic) DownloadCmdResult(req *types.DownloadCmdResultReq) error {
-	// todo: add your logic here and delete this line
+func (l *DownloadCmdResultLogic) DownloadCmdResult(req *types.DownloadCmdResultReq) (*components.CacheFile, error) {
+	sshResult := l.svcCtx.Components.SSHResultManager
+	file := sshResult.GetFile(req.Id)
 
-	return nil
+	if (file == nil) {
+		return nil, utils.SSHCmdError("no file exist")
+	}
+
+	return file, nil
 }

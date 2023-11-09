@@ -1,26 +1,34 @@
 package components
 
 import (
-	"context"
 	"fmt"
 	"hassh/src/internal/types"
-	"os"
 	"sync"
 
 	switchgo "github.com/DominguitoLamo/switchGo"
-	"github.com/zeromicro/go-zero/core/logc"
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
+type CacheFile struct {
+	Content []byte
+	Name string
+}
+
 type SshResultManager struct {
-	resultMap map[string]*os.File
+	resultMap map[string]*CacheFile
 	mutex sync.Mutex
+}
+
+func NewCacheFile(content []byte, name string) *CacheFile {
+	f := new(CacheFile)
+	f.Content = content
+	f.Name = name
+	return f
 }
 
 func NewSSHResultManager() *SshResultManager {
 	manager := new(SshResultManager)
 	manager.mutex = sync.Mutex{}
-	manager.resultMap = make(map[string]*os.File)
+	manager.resultMap = make(map[string]*CacheFile)
 	return manager
 }
 
@@ -28,22 +36,11 @@ func (s *SshResultManager) SaveResult(session *switchgo.SSHSession, req *types.R
 	// create file
 	t := session.GetLastUseTime()
 	date := fmt.Sprintf("%d%d%d", t.Year(), t.Month(), t.Day()) 
-	fileName := req.Name + " " + req.Ip + " " + date
-	file, fileErr := os.Create(fileName)
-	if (fileErr != nil) {
-		logx.Error(fileErr.Error())
-		return fileErr
-	}
-	bytes, err := file.Write([]byte(result))
-	if (err != nil) {
-		logx.Error("Write file error: ", err.Error())
-	} else {
-		logc.Debug(context.Background(), "Write file success. %s bytes written", bytes)
-	}
+	fileName := req.Name + "_" + req.Ip + "_" + date + ".txt"
 
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
-	s.resultMap[key] = file
+	s.resultMap[key] = NewCacheFile([]byte(result), fileName)
 
 	return nil
 }
@@ -51,4 +48,13 @@ func (s *SshResultManager) SaveResult(session *switchgo.SSHSession, req *types.R
 func (s *SshResultManager) IsExist(id string) bool {
 	result := s.resultMap[id]
 	return result != nil
+}
+
+func (s *SshResultManager) GetFile(id string) *CacheFile {
+	result := s.resultMap[id]
+	return result
+}
+
+func (s *SshResultManager) DeleteFile(id string) {
+	s.resultMap[id] = nil
 }

@@ -13,10 +13,10 @@ import (
 	"hassh/src/internal/svc"
 	"hassh/src/internal/types"
 	"hassh/src/internal/utils"
+	"hassh/src/logger"
 	taskqueue "hassh/src/taskQueue"
 
 	switchgo "github.com/DominguitoLamo/switchGo"
-	"github.com/zeromicro/go-zero/core/logc"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -71,8 +71,7 @@ func (l *RunCmdLogic) RunCmd(req *types.RunCmdReq) (resp *types.RunCmdResp, err 
 			return
 		}
 		result = cmdResult
-		// logx.Debug("cmd return result: ", result)
-		logc.Debug(l.ctx, "cmd return result: %s", result)
+		logger.DebugLog("cmd return result: %s", result)
 		l.saveFile(session, req, saveKey, result)
 	}
 	l.svcCtx.Queues.SSHQueue.AddTask(taskReq)
