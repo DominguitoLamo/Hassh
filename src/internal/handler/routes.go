@@ -13,6 +13,7 @@ import (
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	addSshTaskRoutes(server, serverCtx)
+	addGroupInfo(server, serverCtx)
 }
 
 func addSshTaskRoutes(server *rest.Server, serverCtx *svc.ServiceContext) {
@@ -100,6 +101,11 @@ func addGroupInfo(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodDelete,
 				Path:    "/groupTask",
 				Handler: groupInfo.DeleteGroupTaskHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/groupNames",
+				Handler: groupInfo.GetGroupNamesHandler(serverCtx),
 			},
 		},
 		rest.WithPrefix("/api/v1"),

@@ -27,6 +27,7 @@ type (
 		FindOne(ctx context.Context, id int64) (*GroupInfo, error)
 		Update(ctx context.Context, data *GroupInfo) error
 		Delete(ctx context.Context, id int64) error
+		SelectAll(ctx context.Context) (*[]*GroupInfo, error)
 	}
 
 	defaultGroupInfoModel struct {
@@ -60,6 +61,20 @@ func (m *defaultGroupInfoModel) FindOne(ctx context.Context, id int64) (*GroupIn
 	switch err {
 	case nil:
 		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *defaultGroupInfoModel) SelectAll(ctx context.Context) (*[]*GroupInfo, error) {
+	query := fmt.Sprintf("select %s from %s", groupInfoRows, m.table)
+	resp := new([]*GroupInfo)
+	err := m.conn.QueryRowsCtx(ctx, resp, query)
+	switch err {
+	case nil:
+		return resp, nil
 	case sqlc.ErrNotFound:
 		return nil, ErrNotFound
 	default:

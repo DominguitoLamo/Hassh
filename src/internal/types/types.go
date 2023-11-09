@@ -102,6 +102,11 @@ type GetGroupInfoResp struct {
 	Tasks []GETSSHInfoResp `json:"tasks"`
 }
 
+type GetGroupName struct {
+	Id    int64            `json:"id"` // Primary Key
+	Name  string           `json:"name"`
+}
+
 type AddGroupInfoReq struct {
 	Name string `json:"name"`
 }
