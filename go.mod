@@ -33,6 +33,7 @@ require (
 	github.com/prometheus/client_model v0.4.1-0.20230718164431-9a2bf3000d16 // indirect
 	github.com/prometheus/common v0.44.0 // indirect
 	github.com/prometheus/procfs v0.11.1 // indirect
+	github.com/rs/zerolog v1.31.0
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/zeromicro/x v0.0.0-20230424055333-01c7fb9548d4
 	go.opentelemetry.io/otel v1.19.0 // indirect

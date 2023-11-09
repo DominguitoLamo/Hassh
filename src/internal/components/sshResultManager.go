@@ -47,3 +47,8 @@ func (s *SshResultManager) SaveResult(session *switchgo.SSHSession, req *types.R
 
 	return nil
 }
+
+func (s *SshResultManager) IsExist(id string) bool {
+	result := s.resultMap[id]
+	return result != nil
+}

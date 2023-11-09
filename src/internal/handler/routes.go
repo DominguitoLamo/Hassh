@@ -53,6 +53,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/getCmdResult",
 				Handler: sshtask.DownloadCmdResultHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/fileExist",
+				Handler: sshtask.FileExistHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/api/v1"),
 	)

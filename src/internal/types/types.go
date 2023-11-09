@@ -83,3 +83,11 @@ type RunCmdResp struct {
 type DownloadCmdResultReq struct {
 	Id string `json:"id"`
 }
+
+type FileExistReq struct {
+	Id string `json:"id"` // 傳入生成的md5 id
+}
+
+type FileExistResp struct {
+	IsExist bool `json:"isExist"`
+}
