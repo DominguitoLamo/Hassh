@@ -91,3 +91,56 @@ type FileExistReq struct {
 type FileExistResp struct {
 	IsExist bool `json:"isExist"`
 }
+
+type GetGroupInfoReq struct {
+	Id int64 `json:"id"`
+}
+
+type GetGroupInfoResp struct {
+	Id    int64            `json:"id"` // Primary Key
+	Name  string           `json:"name"`
+	Tasks []GETSSHInfoResp `json:"tasks"`
+}
+
+type AddGroupInfoReq struct {
+	Name string `json:"name"`
+}
+
+type AddGroupInfoResp struct {
+	Id int64 `json:"id"` // Primary Key
+}
+
+type UpdateGroupInfoReq struct {
+	Id   int64  `json:"id"` // Primary Key
+	Name string `json:"name"`
+}
+
+type UpdateGroupInfoResp struct {
+	Id int64 `json:"id"` // Primary Key
+}
+
+type DeleteGroupInfoReq struct {
+	Id int64 `json:"id"`
+}
+
+type DeleteGroupInfoResp struct {
+	Id int64 `json:"id"`
+}
+
+type AddGroupTaskReq struct {
+	GroupId int64 `db:"group_id"`
+	TaskId  int64 `db:"task_id"`
+}
+
+type AddGroupTaskResp struct {
+	Id int64 `json:"id"`
+}
+
+type DeleteGroupTaskReq struct {
+	GroupId int64 `db:"group_id"`
+	TaskId  int64 `db:"task_id"`
+}
+
+type DeleteGroupTaskResp struct {
+	Id int64 `json:"id"`
+}

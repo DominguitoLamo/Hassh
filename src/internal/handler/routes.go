@@ -5,12 +5,17 @@ import (
 	"net/http"
 
 	sshtask "hassh/src/internal/handler/sshtask"
+	groupInfo "hassh/src/internal/handler/groupInfo"
 	"hassh/src/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
+	addSshTaskRoutes(server, serverCtx)
+}
+
+func addSshTaskRoutes(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
@@ -57,6 +62,44 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/fileExist",
 				Handler: sshtask.FileExistHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/api/v1"),
+	)
+}
+
+func addGroupInfo(server *rest.Server, serverCtx *svc.ServiceContext) {
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/groupInfo",
+				Handler: groupInfo.GetGroupInfoHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/groupInfo",
+				Handler: groupInfo.AddGroupInfoHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/groupInfo",
+				Handler: groupInfo.UpdateGroupInfoHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/groupInfo",
+				Handler: groupInfo.DeleteGroupInfoHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/groupTask",
+				Handler: groupInfo.AddGroupTaskHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/groupTask",
+				Handler: groupInfo.DeleteGroupTaskHandler(serverCtx),
 			},
 		},
 		rest.WithPrefix("/api/v1"),
