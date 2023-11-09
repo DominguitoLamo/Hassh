@@ -1,4 +1,4 @@
-package group_task
+package groupTask
 
 import "github.com/zeromicro/go-zero/core/stores/sqlx"
 

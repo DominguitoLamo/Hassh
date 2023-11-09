@@ -133,8 +133,8 @@ type DeleteGroupInfoResp struct {
 }
 
 type AddGroupTaskReq struct {
-	GroupId int64 `db:"group_id"`
-	TaskId  int64 `db:"task_id"`
+	GroupId int64 `json:"groupId"`
+	TaskId  int64 `json:"taskId"`
 }
 
 type AddGroupTaskResp struct {
@@ -142,8 +142,8 @@ type AddGroupTaskResp struct {
 }
 
 type DeleteGroupTaskReq struct {
-	GroupId int64 `db:"group_id"`
-	TaskId  int64 `db:"task_id"`
+	GroupId int64 `json:"groupId"`
+	TaskId  int64 `json:"taskId"`
 }
 
 type DeleteGroupTaskResp struct {
