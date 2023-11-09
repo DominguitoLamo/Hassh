@@ -23,7 +23,7 @@ func NewGetGroupInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetG
 	}
 }
 
-func (l *GetGroupInfoLogic) GetGroupInfo(req *types.GetGroupInfoReq) (resp []types.GetGroupInfoResp, err error) {
+func (l *GetGroupInfoLogic) GetGroupInfo() (resp []types.GetGroupInfoResp, err error) {
 	// todo: add your logic here and delete this line
 
 	return

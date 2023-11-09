@@ -19,11 +19,11 @@ func DeleteGroupTaskHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := groupInfo.NewDeleteGroupTaskLogic(r.Context(), svcCtx)
-		resp, err := l.DeleteGroupTask(&req)
+		err := l.DeleteGroupTask(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
-			httpx.OkJsonCtx(r.Context(), w, resp)
+			httpx.Ok(w)
 		}
 	}
 }
