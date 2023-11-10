@@ -28,6 +28,7 @@ type (
 		Update(ctx context.Context, data *GroupTasks) error
 		Delete(ctx context.Context, data *GroupTasks) error
 		DeleteByGroupId(ctx context.Context, groupId int64) error
+		DeleteByTaskId(ctx context.Context, taskId int64) error
 		SelectTaskIds(ctx context.Context, groupId int64) ([]int64, error)
 	}
 
@@ -58,6 +59,12 @@ func (m *defaultGroupTasksModel) Delete(ctx context.Context, data *GroupTasks) e
 
 func (m *defaultGroupTasksModel) DeleteByGroupId(ctx context.Context, groupId int64) error {
 	query := fmt.Sprintf("delete from %s where `group_id` = ?", m.table)
+	_, err := m.conn.ExecCtx(ctx, query, groupId)
+	return err
+}
+
+func (m *defaultGroupTasksModel) DeleteByTaskId(ctx context.Context, groupId int64) error {
+	query := fmt.Sprintf("delete from %s where `task_id` = ?", m.table)
 	_, err := m.conn.ExecCtx(ctx, query, groupId)
 	return err
 }

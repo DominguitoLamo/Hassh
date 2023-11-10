@@ -3,10 +3,12 @@ package sshtask
 import (
 	"context"
 
+	groupTask "hassh/src/internal/model/groupTasksModel"
+	sshtask "hassh/src/internal/model/sshTaskModel"
 	"hassh/src/internal/svc"
 	"hassh/src/internal/types"
-
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 type DeleteSshTaskInfoLogic struct {
@@ -24,7 +26,27 @@ func NewDeleteSshTaskInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 }
 
 func (l *DeleteSshTaskInfoLogic) DeleteSshTaskInfo(req *types.DELETESSHInfoReq) (resp *types.DELETESSHInfoResp, err error) {
-	// todo: add your logic here and delete this line
+	conn := l.svcCtx.Components.DbConnection
+	transErr := conn.TransactCtx(context.Background(), func(ctx context.Context, session sqlx.Session) error {
+		groupTaskDao := groupTask.NewGroupTasksModel(conn)
+		taskErr := groupTaskDao.DeleteByTaskId(ctx, req.Id)
+		if taskErr != nil {
+			return taskErr
+		}
 
+		sshTaskDao := sshtask.NewSshTaskModel(conn)
+		sshErr := sshTaskDao.Delete(ctx, req.Id)
+		if sshErr != nil {
+			return taskErr
+		}
+		return nil
+	})
+	if (transErr != nil) {
+		err = transErr
+		return
+	}
+
+	resp = new(types.DELETESSHInfoResp)
+	resp.Id = req.Id
 	return
 }
