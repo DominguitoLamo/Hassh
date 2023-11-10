@@ -27,6 +27,7 @@ type (
 		FindOne(ctx context.Context, id int64) (*GroupTasks, error)
 		Update(ctx context.Context, data *GroupTasks) error
 		Delete(ctx context.Context, data *GroupTasks) error
+		DeleteByGroupId(ctx context.Context, groupId int64) error
 		SelectTaskIds(ctx context.Context, groupId int64) ([]int64, error)
 	}
 
@@ -52,6 +53,12 @@ func newGroupTasksModel(conn sqlx.SqlConn) *defaultGroupTasksModel {
 func (m *defaultGroupTasksModel) Delete(ctx context.Context, data *GroupTasks) error {
 	query := fmt.Sprintf("delete from %s where `group_id` = ? and `task_id` = ?", m.table)
 	_, err := m.conn.ExecCtx(ctx, query, data.GroupId, data.TaskId)
+	return err
+}
+
+func (m *defaultGroupTasksModel) DeleteByGroupId(ctx context.Context, groupId int64) error {
+	query := fmt.Sprintf("delete from %s where `group_id` = ?", m.table)
+	_, err := m.conn.ExecCtx(ctx, query, groupId)
 	return err
 }
 
