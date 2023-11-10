@@ -23,8 +23,8 @@ func NewGroupFileExistLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Gr
 	}
 }
 
-func (l *GroupFileExistLogic) GroupFileExist(req *types.GroupFileExistReq) (resp *types.RunGroupTasksResp, err error) {
-	// todo: add your logic here and delete this line
-
+func (l *GroupFileExistLogic) GroupFileExist(req *types.GroupFileExistReq) (resp *types.GroupFileExistResp, err error) {
+	resp = new(types.GroupFileExistResp)
+	resp.IsExist = l.svcCtx.Components.GroupResultManager.IsExist(req.Id)
 	return
 }

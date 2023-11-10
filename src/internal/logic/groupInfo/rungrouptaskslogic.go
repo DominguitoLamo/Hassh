@@ -52,7 +52,7 @@ func (l *RunGroupTasksLogic) RunGroupTasks(req *types.RunGroupTasksReq) (resp *t
 			result.ErrMsg = dbErr.Error()
 		}
 		detailLen := len(*detail.Tasks)
-		result.Details = make([]components.SSHTaskDetail, detailLen)
+		result.Details = make([]components.SSHTaskDetail, 0)
 		resultChan := make(chan components.SSHTaskDetail, detailLen)
 
 		for _, item := range *detail.Tasks {
@@ -80,17 +80,20 @@ func (l *RunGroupTasksLogic) RunGroupTasks(req *types.RunGroupTasksReq) (resp *t
 					return
 				}
 				sshTask.Content = cmdResult
-				logger.DebugLog("%s result: %s", clone.Name, cmdResult)
+				// logger.DebugLog("%s result: %s", clone.Name, cmdResult)
 				resultChan <- sshTask
-
-
 			}()
 		}
 
 		for item := range resultChan {
+			logger.DebugLog("%s received: %s", item.Name, item.Content)
 			result.Details = append(result.Details, item)
-		}
 
+			if len(result.Details) == 4 {
+				break
+			}
+		}
+		logger.DebugLog("%s task finished", result.Key)
 		l.svcCtx.Components.GroupResultManager.SaveResult(result)
 	}
 

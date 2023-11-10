@@ -71,6 +71,7 @@ func InitComponents(ctx *ServiceContext) {
 	InitDBConnection(ctx)
 	InitSSHSession(ctx)
 	InitSSHResultManager(ctx)
+	InitGroupResultManager(ctx)
 }
 
 func InitSSHResultManager(ctx *ServiceContext) {

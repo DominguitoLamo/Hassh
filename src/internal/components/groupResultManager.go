@@ -15,12 +15,13 @@ type SSHTaskDetail struct {
 
 type GroupResultManager struct {
 	resultMap map[string]GroupTaskResult
-	mutex     sync.Mutex
+	mutex     *sync.Mutex
 }
 
 func NewGroupResultManager() GroupResultManager {
 	var manager GroupResultManager
 	manager.resultMap = make(map[string]GroupTaskResult)
+	manager.mutex = &sync.Mutex{}
 	return manager
 }
 
