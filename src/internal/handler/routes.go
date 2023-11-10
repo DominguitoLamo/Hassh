@@ -107,6 +107,21 @@ func addGroupInfo(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/groupNames",
 				Handler: groupInfo.GetGroupNamesHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/runGroupTasks",
+				Handler: groupInfo.RunGroupTasksHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/groupFileExist",
+				Handler: groupInfo.GroupFileExistHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/downloadGroupFile",
+				Handler: groupInfo.DownloadGroupFileHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/api/v1"),
 	)

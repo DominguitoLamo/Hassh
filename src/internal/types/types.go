@@ -149,3 +149,23 @@ type DeleteGroupTaskReq struct {
 type DeleteGroupTaskResp struct {
 	Id int64 `json:"id"`
 }
+
+type RunGroupTasksReq struct {
+	Id int64 `json:"id"`
+}
+
+type RunGroupTasksResp struct {
+	Id string `json:"id"`
+}
+
+type GroupFileExistReq struct {
+	Id string `json:"id"`
+}
+
+type GroupFileExistResp struct {
+	IsExist bool `json:"isExist"`
+}
+
+type DownloadGroupFileReq struct {
+	Id string `json:"id"`
+}

@@ -65,6 +65,26 @@ type (
 	DeleteGroupTaskResp {
 		Id int64 `json:"id"`
 	}
+
+	RunGroupTasksReq {
+		Id int64 `json:"id"`
+	}
+
+	RunGroupTasksResp {
+		Id string `json:"id"`
+	}
+
+	GroupFileExistReq {
+		Id string `json:"id"`
+	}
+
+	GroupFileExistResp {
+		IsExist bool `json:"isExist"`
+	}
+
+	DownloadGroupFileReq {
+		Id string `json:"id"`
+	}
 )
 
 @server (
@@ -89,4 +109,13 @@ service groupInfo {
 
 	@handler deleteGroupTask
 	delete /groupTask(DeleteGroupTaskReq) returns (DeleteGroupTaskResp)
+
+	@handler runGroupTasks
+	get /runGroupTasks(RunGroupTasksReq) returns (RunGroupTasksResp)
+
+	@handler groupFileExist
+	get /groupFileExist(GroupFileExistReq) returns (RunGroupTasksResp)
+
+	@handler downloadGroupFile
+	get /downloadGroupFile(DownloadGroupFileReq) returns ()
 }
