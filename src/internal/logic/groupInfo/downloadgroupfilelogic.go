@@ -3,8 +3,10 @@ package groupInfo
 import (
 	"context"
 
+	"hassh/src/internal/components"
 	"hassh/src/internal/svc"
 	"hassh/src/internal/types"
+	"hassh/src/internal/utils"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,8 +25,18 @@ func NewDownloadGroupFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 	}
 }
 
-func (l *DownloadGroupFileLogic) DownloadGroupFile(req *types.DownloadGroupFileReq) error {
-	// todo: add your logic here and delete this line
+func (l *DownloadGroupFileLogic) DownloadGroupFile(req *types.DownloadGroupFileReq) (resp *components.GroupTaskResult, err error) {
+	isExist := l.svcCtx.Components.GroupResultManager.IsExist(req.Id)
+	if !isExist {
+		err = utils.SSHCmdError("File doesn't exist")
+		return
+	}
+	result := l.svcCtx.Components.GroupResultManager.GetFile(req.Id)
+	if result.ErrMsg != "" {
+		err = utils.SSHCmdError(result.ErrMsg)
+		return
+	}
 
-	return nil
+	resp = &result
+	return
 }
