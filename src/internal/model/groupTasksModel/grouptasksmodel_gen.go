@@ -27,6 +27,7 @@ type (
 		FindOne(ctx context.Context, id int64) (*GroupTasks, error)
 		Update(ctx context.Context, data *GroupTasks) error
 		Delete(ctx context.Context, data *GroupTasks) error
+		SelectTaskIds(ctx context.Context, groupId int64) ([]int64, error)
 	}
 
 	defaultGroupTasksModel struct {
@@ -66,6 +67,22 @@ func (m *defaultGroupTasksModel) FindOne(ctx context.Context, id int64) (*GroupT
 	default:
 		return nil, err
 	}
+}
+
+func (m *defaultGroupTasksModel) SelectTaskIds(ctx context.Context, groupId int64) ([]int64, error) {
+	taskIdsQuery := fmt.Sprintf("select %s from %s where group_id = ?", groupTasksRows, m.table)
+	tasks := make([]*GroupTasks, 0)
+	taskErr := m.conn.QueryRowsCtx(ctx, &tasks, taskIdsQuery, groupId)
+	switch taskErr {
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	}
+
+	result := make([]int64, 0)
+	for _, item := range tasks {
+		result = append(result, item.TaskId)
+	}
+	return result, nil
 }
 
 func (m *defaultGroupTasksModel) Insert(ctx context.Context, data *GroupTasks) (sql.Result, error) {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/zeromicro/go-zero/core/stores/builder"
@@ -15,6 +16,7 @@ import (
 var (
 	sshTaskFieldNames          = builder.RawFieldNames(&SshTask{})
 	sshTaskRows                = strings.Join(sshTaskFieldNames, ",")
+	SshTaskRows		   		   = sshTaskRows
 	sshTaskRowsExpectAutoSet   = strings.Join(stringx.Remove(sshTaskFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	sshTaskRowsWithPlaceHolder = strings.Join(stringx.Remove(sshTaskFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 )
@@ -26,6 +28,7 @@ type (
 		Update(ctx context.Context, data *SshTask) error
 		Delete(ctx context.Context, id int64) error
 		SelectItems(ctx context.Context, page int64, pageNum int64) (*[]*SshTask, error)
+		SelectItemsByIds(ctx context.Context, ids []int64) (*[]*SshTask, error)
 	}
 
 	defaultSshTaskModel struct {
@@ -83,6 +86,26 @@ func (m *defaultSshTaskModel) SelectItems(ctx context.Context, page int64, pageN
 		return nil, ErrNotFound
 	default:
 		return nil, err
+	}
+}
+
+func (m *defaultSshTaskModel) SelectItemsByIds(ctx context.Context, ids []int64) (*[]*SshTask, error) {
+	idsStrs := make([]string, 0)
+	for _, item := range ids {
+		str := strconv.Itoa(int(item))
+		idsStrs = append(idsStrs, str)
+	}
+
+	sshTasksQuery := fmt.Sprintf("select %s from ssh_task where id in (%s)", sshTaskRows, strings.Join(idsStrs, ","))
+	resp := new([]*SshTask)
+	sshErr := m.conn.QueryRowsCtx(ctx, resp, sshTasksQuery)
+	switch sshErr {
+		case nil:
+			return resp, nil
+		case sqlc.ErrNotFound:
+			return nil, ErrNotFound
+		default:
+			return nil, sshErr
 	}
 }
 

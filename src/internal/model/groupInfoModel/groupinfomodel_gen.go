@@ -6,8 +6,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	groupTask "hassh/src/internal/model/groupTasksModel"
+	sshtask "hassh/src/internal/model/sshTaskModel"
+	"hassh/src/logger"
 	"strings"
 
+	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/stores/builder"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -28,6 +32,7 @@ type (
 		Update(ctx context.Context, data *GroupInfo) error
 		Delete(ctx context.Context, id int64) error
 		SelectAll(ctx context.Context) (*[]*GroupInfo, error)
+		SelectGroupDetail(ctx context.Context) (resp []GroupDetail, err error)
 	}
 
 	defaultGroupInfoModel struct {
@@ -38,6 +43,12 @@ type (
 	GroupInfo struct {
 		Id   int64  `db:"id"` // Primary Key
 		Name string `db:"name"`
+	}
+
+	GroupDetail struct {
+		Id   int64
+		Name string
+		Tasks *[]*sshtask.SshTask 
 	}
 )
 
@@ -80,6 +91,44 @@ func (m *defaultGroupInfoModel) SelectAll(ctx context.Context) (*[]*GroupInfo, e
 	default:
 		return nil, err
 	}
+}
+
+func (m *defaultGroupInfoModel) SelectGroupDetail(ctx context.Context) (resp []GroupDetail, err error) {
+	groupInfo, groupErr := m.SelectAll(ctx)
+	if (groupErr != nil) {
+		logger.ErrorLog(groupErr.Error())
+		err = groupErr
+		return
+	}
+
+	resp = make([]GroupDetail, 0)
+	for _, item := range *groupInfo {
+		var detail GroupDetail
+		copier.Copy(&detail, &item)
+
+		taskDao := groupTask.NewGroupTasksModel(m.conn)
+		taskIds, taskErr := taskDao.SelectTaskIds(ctx, item.Id)
+		if (taskErr != nil) {
+			logger.ErrorLog(taskErr.Error())
+			err = taskErr
+			return
+		}
+
+		if len(taskIds) == 0 {
+			continue
+		}
+
+		sshDao := sshtask.NewSshTaskModel(m.conn)
+		sshTasks, sshErr := sshDao.SelectItemsByIds(ctx, taskIds)
+		if (sshErr != nil) {
+			logger.ErrorLog(sshErr.Error())
+			err = sshErr
+			return
+		}
+		detail.Tasks = sshTasks
+		resp = append(resp, detail)
+	}
+	return
 }
 
 func (m *defaultGroupInfoModel) Insert(ctx context.Context, data *GroupInfo) (sql.Result, error) {
