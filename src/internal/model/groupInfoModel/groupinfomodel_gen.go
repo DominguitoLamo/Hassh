@@ -33,6 +33,7 @@ type (
 		Delete(ctx context.Context, id int64) error
 		SelectAll(ctx context.Context) (*[]*GroupInfo, error)
 		SelectGroupDetail(ctx context.Context) (resp []GroupDetail, err error)
+		SelectGroupDetailById(ctx context.Context, groupId int64) (resp GroupDetail, err error)
 	}
 
 	defaultGroupInfoModel struct {
@@ -129,6 +130,33 @@ func (m *defaultGroupInfoModel) SelectGroupDetail(ctx context.Context) (resp []G
 		resp = append(resp, detail)
 	}
 	return
+}
+
+func (m *defaultGroupInfoModel) SelectGroupDetailById(ctx context.Context, groupId int64) (resp GroupDetail, err error) {
+	var detail GroupDetail
+	detail.Id = groupId
+
+	taskDao := groupTask.NewGroupTasksModel(m.conn)
+	taskIds, taskErr := taskDao.SelectTaskIds(ctx, groupId)
+	if (taskErr != nil) {
+		logger.ErrorLog(taskErr.Error())
+		err = taskErr
+		return
+	}
+
+	if len(taskIds) == 0 {
+		return detail, nil
+	}
+
+	sshDao := sshtask.NewSshTaskModel(m.conn)
+	sshTasks, sshErr := sshDao.SelectItemsByIds(ctx, taskIds)
+	if (sshErr != nil) {
+		logger.ErrorLog(sshErr.Error())
+		err = sshErr
+		return
+	}
+	detail.Tasks = sshTasks
+	return detail, nil
 }
 
 func (m *defaultGroupInfoModel) Insert(ctx context.Context, data *GroupInfo) (sql.Result, error) {

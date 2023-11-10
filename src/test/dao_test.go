@@ -40,3 +40,13 @@ func TestSshTasksByTaskIds(t *testing.T) {
 		fmt.Println(item)
 	}
 }
+
+func TestSelectDetailByGroupId(t *testing.T) {
+	dbConnection := sqlx.NewMysql(CONN_URL)
+	dao := groupInfo.NewGroupInfoModel(dbConnection)
+	items, _ := dao.SelectGroupDetailById(context.Background(), 1)
+	fmt.Println(items.Name)
+	for _, item := range *items.Tasks {
+		fmt.Println(item)
+	}
+}

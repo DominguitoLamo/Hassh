@@ -19,10 +19,12 @@ type ComponentRegister struct {
 	DbConnection sqlx.SqlConn
 	SSHManager *switchgo.SessionManager
 	SSHResultManager *components.SshResultManager
+	GroupResultManager *components.GroupResultManager
 }
 
 type QueueRegister struct {
 	SSHQueue taskqueue.SshTaskQueue
+	GroupQueue taskqueue.GroupTaskQueue
 }
 
 type ServiceContext struct {
@@ -60,6 +62,9 @@ func (ctx *ServiceContext) GetTmpPath() string {
 func InitQueues(ctx *ServiceContext) {
 	ctx.Queues.SSHQueue = *taskqueue.NewSshTaskQueue()
 	ctx.Queues.SSHQueue.RunTask()
+
+	ctx.Queues.GroupQueue = *taskqueue.NewGroupTaskQueue()
+	ctx.Queues.GroupQueue.RunTask()
 }
 
 func InitComponents(ctx *ServiceContext) {
@@ -71,6 +76,11 @@ func InitComponents(ctx *ServiceContext) {
 func InitSSHResultManager(ctx *ServiceContext) {
 	manager := components.NewSSHResultManager()
 	ctx.Components.SSHResultManager = manager
+}
+
+func InitGroupResultManager(ctx *ServiceContext) {
+	manager := components.NewGroupResultManager()
+	ctx.Components.GroupResultManager = &manager
 }
 
 func InitDBConnection(ctx *ServiceContext) {
