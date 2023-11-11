@@ -5,21 +5,13 @@ import (
 
 	"hassh/src/internal/logic/sshtask"
 	"hassh/src/internal/svc"
-	"hassh/src/internal/types"
-
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func GetSshTaskInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.GETSSHInfoReq
-		if err := httpx.Parse(r, &req); err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
-			return
-		}
-
 		l := sshtask.NewGetSshTaskInfoLogic(r.Context(), svcCtx)
-		resp, err := l.GetSshTaskInfo(&req)
+		resp, err := l.GetSshTaskInfo()
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

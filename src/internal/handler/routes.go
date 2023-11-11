@@ -21,7 +21,7 @@ func addSshTaskRoutes(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/echo",
+				Path:    "/echo/:msg",
 				Handler: sshtask.EchoMsgHandler(serverCtx),
 			},
 			{

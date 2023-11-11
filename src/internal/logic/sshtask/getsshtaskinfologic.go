@@ -25,9 +25,9 @@ func NewGetSshTaskInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 	}
 }
 
-func (l *GetSshTaskInfoLogic) GetSshTaskInfo(req *types.GETSSHInfoReq) (resp *[]*types.GETSSHInfoResp, err error) {
+func (l *GetSshTaskInfoLogic) GetSshTaskInfo() (resp *[]*types.GETSSHInfoResp, err error) {
 	dao := sshtask.NewSshTaskModel(l.svcCtx.Components.DbConnection)
-	sqlResult, sqlErr := dao.SelectItems(l.ctx, req.Page - 1, req.PageItemsNum)
+	sqlResult, sqlErr := dao.SelectItems(l.ctx)
 	if sqlErr != nil {
 		logx.Error("sql error: ", sqlErr.Error())
 		err = sqlErr

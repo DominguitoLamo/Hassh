@@ -2,8 +2,8 @@
 package types
 
 type GETSSHInfoReq struct {
-	Page int64 `json:"page"`
-	PageItemsNum int64 `json:"pageItemsNum"`
+	Page int64 `path:"page"`
+	PageItemsNum int64 `path:"pageItemsNum"`
 }
 
 type GETSSHInfoResp struct {
@@ -55,7 +55,7 @@ type DELETESSHInfoResp struct {
 }
 
 type EchoReq struct {
-	Msg string `json:"msg"`
+	Msg string `path:"msg"`
 }
 
 type EchoResp struct {
