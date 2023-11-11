@@ -41,7 +41,7 @@ func addSshTaskRoutes(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodDelete,
-				Path:    "/sshtask",
+				Path:    "/sshtask/:id",
 				Handler: sshtask.DeleteSshTaskInfoHandler(serverCtx),
 			},
 			{
@@ -56,12 +56,12 @@ func addSshTaskRoutes(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/getCmdResult",
+				Path:    "/getCmdResult/:id",
 				Handler: sshtask.DownloadCmdResultHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/fileExist",
+				Path:    "/fileExist/:id",
 				Handler: sshtask.FileExistHandler(serverCtx),
 			},
 		},

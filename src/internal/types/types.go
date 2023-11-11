@@ -47,7 +47,7 @@ type UpdateSSHInfoResp struct {
 }
 
 type DELETESSHInfoReq struct {
-	Id int64 `json:"id"`
+	Id int64 `path:"id"`
 }
 
 type DELETESSHInfoResp struct {
@@ -81,11 +81,11 @@ type RunCmdResp struct {
 }
 
 type DownloadCmdResultReq struct {
-	Id string `json:"id"`
+	Id string `path:"id"`
 }
 
 type FileExistReq struct {
-	Id string `json:"id"` // 傳入生成的md5 id
+	Id string `path:"id"` // 傳入生成的md5 id
 }
 
 type FileExistResp struct {
