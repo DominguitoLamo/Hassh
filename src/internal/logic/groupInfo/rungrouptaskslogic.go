@@ -89,7 +89,7 @@ func (l *RunGroupTasksLogic) RunGroupTasks(req *types.RunGroupTasksReq) (resp *t
 			logger.DebugLog("%s received: %s", item.Name, item.Content)
 			result.Details = append(result.Details, item)
 
-			if len(result.Details) == 4 {
+			if len(result.Details) == detailLen {
 				break
 			}
 		}

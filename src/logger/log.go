@@ -7,7 +7,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-const LOGGER_LEVEL = constant.DEBUG_LEVEL
+const LOGGER_LEVEL = constant.ERROR_LEVEL
 
 func DebugLog(format string, v... interface{}) {
 	if LOGGER_LEVEL > constant.DEBUG_LEVEL {
