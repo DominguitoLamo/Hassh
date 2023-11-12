@@ -14,6 +14,15 @@ import (
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	addSshTaskRoutes(server, serverCtx)
 	addGroupInfo(server, serverCtx)
+
+	server.AddRoutes([]rest.Route{
+		{
+			Method:  http.MethodGet,
+			Path:    "/:file",
+			// Handler: http.StripPrefix("/admin/", http.FileServer(http.Dir("admin/"))).ServeHTTP,
+			Handler: http.FileServer(http.Dir("admin/")).ServeHTTP,
+		},
+	})
 }
 
 func addSshTaskRoutes(server *rest.Server, serverCtx *svc.ServiceContext) {
