@@ -27,6 +27,7 @@ func main() {
 	middleware.ErrorHandling()
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
+	fmt.Printf("Admin Web Page: http://localhost:%d/admin.html\n", c.Port)
 	server.Start()
 }
 
