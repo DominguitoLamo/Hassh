@@ -73,7 +73,7 @@ func (l *RunGroupTasksLogic) RunGroupTasks(req *types.RunGroupTasksReq) (resp *t
 				}
 
 				cmds := strings.Split(clone.Script, ";")
-				cmdResult, cmdErr := session.RunCmds(cmds...)
+				cmdResult, cmdErr := session.RunCmdsAndClose(cmds...)
 				if (cmdErr != nil) {
 					sshTask.Content += cmdErr.Error() + "\n"
 					resultChan <- sshTask
