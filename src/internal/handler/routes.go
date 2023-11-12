@@ -89,7 +89,7 @@ func addGroupInfo(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodDelete,
-				Path:    "/groupInfo",
+				Path:    "/groupInfo/:id",
 				Handler: groupInfo.DeleteGroupInfoHandler(serverCtx),
 			},
 			{
@@ -109,17 +109,17 @@ func addGroupInfo(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/runGroupTasks",
+				Path:    "/runGroupTasks/:id",
 				Handler: groupInfo.RunGroupTasksHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/groupFileExist",
+				Path:    "/groupFileExist/:id",
 				Handler: groupInfo.GroupFileExistHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/downloadGroupFile",
+				Path:    "/downloadGroupFile/:id",
 				Handler: groupInfo.DownloadGroupFileHandler(serverCtx),
 			},
 		},

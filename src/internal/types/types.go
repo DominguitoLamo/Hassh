@@ -125,7 +125,7 @@ type UpdateGroupInfoResp struct {
 }
 
 type DeleteGroupInfoReq struct {
-	Id int64 `json:"id"`
+	Id int64 `path:"id"`
 }
 
 type DeleteGroupInfoResp struct {
@@ -151,7 +151,7 @@ type DeleteGroupTaskResp struct {
 }
 
 type RunGroupTasksReq struct {
-	Id int64 `json:"id"`
+	Id int64 `path:"id"`
 }
 
 type RunGroupTasksResp struct {
@@ -159,7 +159,7 @@ type RunGroupTasksResp struct {
 }
 
 type GroupFileExistReq struct {
-	Id string `json:"id"`
+	Id string `path:"id"`
 }
 
 type GroupFileExistResp struct {
@@ -167,5 +167,5 @@ type GroupFileExistResp struct {
 }
 
 type DownloadGroupFileReq struct {
-	Id string `json:"id"`
+	Id string `path:"id"`
 }
