@@ -1,0 +1,121 @@
+syntax = "v1"
+
+type (
+	// 定义获取ssh信息的 json 响应体
+	GETSSHInfoResp {
+		Id       int64  `json:"id"` // Primary Key
+		Ip       string `json:"ip"`
+		Name     string `json:"name"`
+		Account  string `json:"account"`
+		Password string `json:"password"`
+		Brand    string `json:"brand"`  // only for cisco, huawei
+		Script   string `json:"script"` // script for task. Statements are separated with ;
+		Desc     string `json:"desc"`   // task desc
+	}
+
+	GetGroupInfoReq {
+		Id int64 `json:"id"`
+	}
+
+	GetGroupInfoResp {
+		Id    int64            `json:"id"` // Primary Key
+		Name  string           `json:"name"`
+		Tasks []GETSSHInfoResp `json:"tasks"`
+	}
+
+	AddGroupInfoReq {
+		Name string `json:"name"`
+	}
+
+	AddGroupInfoResp {
+		Id int64 `json:"id"` // Primary Key
+	}
+
+	UpdateGroupInfoReq {
+		Id   int64  `json:"id"` // Primary Key
+		Name string `json:"name"`
+	}
+
+	UpdateGroupInfoResp {
+		Id int64 `json:"id"` // Primary Key
+	}
+
+	DeleteGroupInfoReq {
+		Id int64 `json:"id"`
+	}
+
+	DeleteGroupInfoResp {
+		Id int64 `json:"id"`
+	}
+
+	AddGroupTaskReq {
+		GroupId int64 `db:"group_id"`
+		TaskId  int64 `db:"task_id"`
+	}
+
+	AddGroupTaskResp {
+		Id int64 `json:"id"`
+	}
+
+	DeleteGroupTaskReq {
+		GroupId int64 `db:"group_id"`
+		TaskId  int64 `db:"task_id"`
+	}
+
+	DeleteGroupTaskResp {
+		Id int64 `json:"id"`
+	}
+
+	RunGroupTasksReq {
+		Id int64 `json:"id"`
+	}
+
+	RunGroupTasksResp {
+		Id string `json:"id"`
+	}
+
+	GroupFileExistReq {
+		Id string `json:"id"`
+	}
+
+	GroupFileExistResp {
+		IsExist bool `json:"isExist"`
+	}
+
+	DownloadGroupFileReq {
+		Id string `json:"id"`
+	}
+)
+
+@server (
+	group: groupInfo
+	prefix: /api/v1
+)
+service groupInfo {
+	@handler getGroupInfo
+	get /groupInfo(GetGroupInfoReq) returns ([]GetGroupInfoResp)
+
+	@handler addGroupInfo
+	post /groupInfo(AddGroupInfoReq) returns (AddGroupInfoResp)
+
+	@handler updateGroupInfo
+	put /groupInfo(UpdateGroupInfoReq) returns (UpdateGroupInfoResp)
+
+	@handler deleteGroupInfo
+	delete /groupInfo(DeleteGroupInfoReq) returns (DeleteGroupInfoResp)
+
+	@handler addGroupTask
+	post /groupTask(AddGroupTaskReq) returns (AddGroupTaskResp)
+
+	@handler deleteGroupTask
+	delete /groupTask(DeleteGroupTaskReq) returns (DeleteGroupTaskResp)
+
+	@handler runGroupTasks
+	get /runGroupTasks(RunGroupTasksReq) returns (RunGroupTasksResp)
+
+	@handler groupFileExist
+	get /groupFileExist(GroupFileExistReq) returns (RunGroupTasksResp)
+
+	@handler downloadGroupFile
+	get /downloadGroupFile(DownloadGroupFileReq) returns ()
+}
