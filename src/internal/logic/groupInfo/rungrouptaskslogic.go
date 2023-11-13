@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/md5"
 	"encoding/hex"
+	"fmt"
 	"io"
 	"strings"
 	"time"
@@ -61,7 +62,8 @@ func (l *RunGroupTasksLogic) RunGroupTasks(req *types.RunGroupTasksReq) (resp *t
 			go func() {
 				logger.DebugLog("%s start to run cmd task", clone.Name)
 				var sshTask components.SSHTaskDetail
-				sshTask.Name = clone.Name
+				date := time.Now()
+				sshTask.Name = fmt.Sprintf("%s_%s_%d%d%d", clone.Name, clone.Ip, date.Year(), date.Month(), date.Day())
 
 				sshManager := l.svcCtx.Components.SSHManager
 				config, _ := switchgo.SSHConfigCreate(clone.Account, clone.Password, clone.Ip, constant.SSH_DEFAULT_PORT, clone.Brand)
