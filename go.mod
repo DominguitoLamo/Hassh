@@ -2,13 +2,13 @@ module hassh
 
 go 1.21.3
 
-require github.com/zeromicro/go-zero v1.6.0
-
 require (
-	github.com/DominguitoLamo/switchGo v0.4.0 // indirect
-	github.com/jinzhu/copier v0.4.0 // indirect
-	golang.org/x/crypto v0.15.0 // indirect
+	github.com/DominguitoLamo/switchGo v0.4.1
+	github.com/jinzhu/copier v0.4.0
+	github.com/zeromicro/go-zero v1.6.0
 )
+
+require golang.org/x/crypto v0.15.0 // indirect
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
